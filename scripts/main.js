@@ -1,5 +1,6 @@
 window.onload = function() {
 
+    //variables that will hold data, direction values that change once you move
     var head, tail, cursors, snake, pokemon, gameText, playerDirection;
     var directions = Object.freeze({up: 0, down: 1, right: 2, left: 3});
 
@@ -84,6 +85,7 @@ window.onload = function() {
             font: "28px Arial",
             fill: "#000000",
         });
+        //keep score text in top right of canvas
         gameText.anchor.setTo(1, 0);
         startGame();
         randomPokemon();
@@ -96,7 +98,9 @@ window.onload = function() {
         frameCounter++;
         if (frameCounter == gameSpeed) {
             movePlayer();
+            //adds new head image in the direction you're going in
             if (selfCollide()) {
+              //alerts with score, clears the values
                 alert("Game Over! You caught " + score + " Pokemon!");
                 clearGame();
                 startGame();
@@ -108,6 +112,7 @@ window.onload = function() {
                 gameText.text = "";
             }
             if (pokemonCollide()) {
+              //ups score and speed, generates a new random pokemon placement
                 score++;
                 pokemon.destroy();
                 randomPokemon();
@@ -115,6 +120,7 @@ window.onload = function() {
                 if (gameSpeed <= 5) gameSpeed = 5;
             } else if (playerDirection != undefined) {
                 removeTail();
+                //deletes tail image after adding a new head image (looks like moving)
             }
             frameCounter = 0;
         }
@@ -125,6 +131,7 @@ window.onload = function() {
         newHead(0, 0);
         tail = head;
         newHead(64, 0);
+        //starting location of player
     }
 
     function clearGame() {
@@ -143,6 +150,7 @@ window.onload = function() {
             pokemon.position.x = Math.floor(Math.random() * 14) * 64;
             pokemon.position.y = Math.floor(Math.random() * 11) * 64;
         } while (pokemonCollide());
+        //generates random (x,y) location on a 64x64 grid
     }
 
     function newHead(x, y) {
@@ -159,29 +167,29 @@ window.onload = function() {
     }
 
     function pokemonCollide() {
-        var needle = tail;
+        var growTail = tail;
         var collides = false;
         var tailLength = 0;
-        while (needle != null) {
+        while (growTail != null) {
             tailLength++;
-            if (pokemon.position.x == needle.image.position.x &&
-                pokemon.position.y == needle.image.position.y) {
+            if (pokemon.position.x == growTail.image.position.x &&
+                pokemon.position.y == growTail.image.position.y) {
                 collides = true;
             }
-            needle = needle.next;
+            growTail = growTail.next;
         }
         return collides;
     }
 
     function selfCollide() {
-        var needle = tail;
+        var growTail = tail;
         var collides = false;
-        while (needle.next != head) {
-            if (needle.image.position.x == head.image.position.x &&
-                needle.image.position.y == head.image.position.y) {
+        while (growTail.next != head) {
+            if (growTail.image.position.x == head.image.position.x &&
+                growTail.image.position.y == head.image.position.y) {
                 collides = true;
             }
-            needle = needle.next;
+            growTail = growTail.next;
         }
         return collides;
     }
