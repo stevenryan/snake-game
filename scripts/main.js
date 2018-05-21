@@ -161,9 +161,9 @@ window.onload = function() {
     function pokemonCollide() {
         var needle = tail;
         var collides = false;
-        var numTimes = 0;
+        var tailLength = 0;
         while (needle != null) {
-            numTimes++;
+            tailLength++;
             if (pokemon.position.x == needle.image.position.x &&
                 pokemon.position.y == needle.image.position.y) {
                 collides = true;
